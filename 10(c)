@@ -1,0 +1,61 @@
+#include <stdio.h>
+struct Student 
+{
+    char name[50];
+    int roll_number;
+    float marks;
+};
+void add_student()
+{
+    FILE *fp;
+    struct Student student;
+    fp = fopen("students.dat", "ab");
+    printf("Enter name: ");
+    scanf(" %[^\n]", student.name);
+    printf("Enter roll number: ");
+    scanf("%d", &student.roll_number);
+    printf("Enter marks: ");
+    scanf("%f", &student.marks);
+
+    fwrite(&student, sizeof(struct Student), 1, fp);
+    fclose(fp);
+}
+
+void view_students() 
+{
+    FILE *fp;
+    struct Student student;
+
+    fp = fopen("students.dat", "rb");
+    while (fread(&student, sizeof(struct Student), 1, fp) == 1) {
+        printf("Name: %s\n", student.name);
+        printf("Roll Number: %d\n", student.roll_number);
+        printf("Marks: %.2f\n\n", student.marks);
+    }
+    fclose(fp);
+}
+
+int main() {
+    int choice;
+    while (1) {
+        printf("1. Add Student\n");
+        printf("2. View Students\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                add_student();
+                break;
+            case 2:
+                view_students();
+                break;
+            case 3:
+                return 0;
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
